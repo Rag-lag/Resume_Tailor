@@ -1,0 +1,41 @@
+[SKILLS]
+Category: Programming Languages
+Python, JavaScript, TypeScript, Java, Dart, CPP, C++
+
+---
+
+[SKILLS]
+Category: Markup and Styling Languages
+HTML, CSS
+
+---
+
+[SKILLS]
+Category: Frameworks and Libraries
+React, Next.js, Angular, Node.js, Flask, Flutter, Express, Tailwind, Bootstrap
+
+---
+
+[SKILLS]
+Category: AI and Machine Learning
+RAG pipelines, LLM applications, NLP, PyTorch, Transformers, BLIP, ViT-GPT2, TensorFlow, Agentic AI
+
+---
+
+[SKILLS]
+Category: Databases and Storage
+PostgreSQL, MongoDB, MySQL, Prisma, SQLite, vector databases (FAISS/Chroma concepts)
+
+---
+
+[SKILLS]
+Category: Tools and Platforms
+Docker, Git, Vercel, REST APIs, Streamlit, HuggingFace, OAuth, ClerkJS
+
+---
+
+[SKILLS]
+Category: Concepts
+Data Structures, Algorithms, System Design, Distributed Systems Basics, API Design, Neural Networks, Reinforcement Learning
+
+---

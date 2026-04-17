@@ -1,0 +1,74 @@
+[EXPERIENCE]
+Role: Casual Tutor
+Company: UNSW
+Evidence Type: Professional Experience
+
+Context:
+Taught postgraduate students in a core computer science course covering data structures, algorithms, and discrete mathematics.
+
+What I Did:
+Delivered weekly tutorials to 30–40 students, breaking down complex algorithmic and mathematical concepts into intuitive explanations. Evaluated over 100 assignments and quizzes per term with detailed feedback, and conducted one-on-one mentoring sessions to strengthen students’ problem-solving, proof-writing, and computational thinking skills.
+
+Tech/Skill:
+Algorithms, Data Structures, Discrete Mathematics, Teaching, Mentorship
+
+Impact:
+Improved student performance and conceptual clarity, enabling stronger logical reasoning and formal problem-solving abilities across the cohort.
+
+---
+
+[EXPERIENCE]
+Role: Developer – Python
+Company: Early-Stage Startup (Remote)
+Evidence Type: Professional Experience
+
+Context:
+Worked on building a document ingestion and processing pipeline for a Retrieval-Augmented Generation (RAG) LLM chatbot.
+
+What I Did:
+Engineered an end-to-end Python pipeline to process 5,000+ documents across six heterogeneous formats, enabling structured data extraction for downstream LLM usage. Automated document parsing using PyMuPDF for text extraction and Microsoft Table Transformer combined with Camelot for detecting and extracting complex tabular data. Designed both page-level and semantic chunking strategies with contextual overlap to improve retrieval quality, and validated the pipeline to ensure accurate parsing, consistent storage, and reliable data flow.
+
+Tech/Skill:
+Python, RAG Systems, LLMs, PyMuPDF, Camelot, Table Transformer, Data Pipelines
+
+Impact:
+Enabled accurate and scalable document understanding, significantly improving retrieval reliability and overall chatbot response quality across diverse document types.
+
+---
+
+[EXPERIENCE]
+Role: Software Development Engineer – Python & Flutter
+Company: StarQuik
+Evidence Type: Professional Experience
+
+Context:
+Worked on a large-scale production e-commerce mobile application with over 1M users.
+
+What I Did:
+Led the migration of a native Android application to Flutter, collaborating with cross-functional and third-party teams to ensure a seamless transition. Developed key features including a cashback-based rewards system and contributed to improvements in product display and checkout flows. Conducted extensive testing across 100+ features, identifying, resolving, and reporting critical bugs to improve overall application stability and performance.
+
+Tech/Skill:
+Flutter, Python, Mobile Development, Debugging, Cross-platform Development
+
+Impact:
+Enhanced cross-platform consistency and user experience while improving app reliability and supporting a scalable system for a 1M+ user base.
+
+---
+
+Role: Software Development Engineer Intern – Angular
+Company: StarQuik
+Evidence Type: Professional Experience
+
+Context:
+Worked on a high-traffic production e-commerce platform serving over 5M users and handling 200K+ daily orders.
+
+What I Did:
+Served as the sole Angular developer during the internship, maintaining and improving frontend functionality for a large-scale application. Diagnosed and resolved over 30 critical frontend bugs, including a major routing issue causing 404 errors, while ensuring stable user flows and performance. Built reusable Angular components, integrated third-party chatbot tools for real-time customer support, and created developer documentation to streamline onboarding and project setup.
+
+Tech/Skill:
+Angular, JavaScript, Frontend Development, Debugging, Component Design
+
+Impact:
+Improved frontend stability and user experience for a platform operating at scale, while reducing onboarding friction and increasing maintainability through better documentation and reusable components.
+
+---

@@ -1,0 +1,63 @@
+[ACHIEVEMENT]
+Title: Built Scalable AI Document Pipeline at Production Scale
+
+Description:
+Engineered an end-to-end document ingestion and parsing pipeline processing 5,000+ documents across 6 formats, enabling reliable data extraction and retrieval for LLM-based applications. :contentReference[oaicite:0]{index=0}
+
+---
+
+[ACHIEVEMENT]
+Title: Led Migration for High-Scale Mobile Application
+
+Description:
+Led migration of a production Android application with 1M+ users to Flutter, improving cross-platform consistency and contributing to a more scalable mobile architecture. :contentReference[oaicite:1]{index=1}
+
+---
+
+[ACHIEVEMENT]
+Title: Maintained and Optimized Systems at Massive Scale
+
+Description:
+Worked on production systems serving 5M+ users and handling 200K+ daily orders, ensuring stable frontend performance and resolving 30+ critical issues including major routing failures. :contentReference[oaicite:2]{index=2}
+
+---
+
+[ACHIEVEMENT]
+Title: Improved Deep Learning Model Performance Significantly
+
+Description:
+Fine-tuned BLIP-based image captioning models, achieving +23% improvement in CIDEr and +30% improvement in SPICE scores through iterative experimentation and data cleaning. :contentReference[oaicite:3]{index=3}
+
+---
+
+[ACHIEVEMENT]
+Title: Delivered Teaching Impact at Postgraduate Level
+
+Description:
+Taught 30–40 postgraduate students per term and evaluated 100+ assignments, helping improve student understanding of algorithms, proofs, and computational thinking. :contentReference[oaicite:4]{index=4}
+
+---
+
+[ACHIEVEMENT]
+Title: Built High-Performance Frontend Systems at Scale
+
+Description:
+Developed frontend systems capable of efficiently handling 100k+ rows using virtualization techniques, ensuring responsive and scalable UI performance. :contentReference[oaicite:5]{index=5}
+
+---
+
+[ACHIEVEMENT]
+Title: End-to-End LLM and NLP System Development
+
+Description:
+Designed and implemented complete NLP workflows including dataset cleaning, model fine-tuning, and inference pipelines using LLaMA-based models for real-world classification tasks. :contentReference[oaicite:6]{index=6}
+
+---
+
+[ACHIEVEMENT]
+Title: Recognition in Competitive Hackathon Environment
+
+Description:
+Received an honourable mention for a unique idea at a university hackathon while building a profile-sharing application for networking events. :contentReference[oaicite:7]{index=7}
+
+---

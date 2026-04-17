@@ -1,0 +1,189 @@
+[PROJECT]
+Title: Airtable-Style Full Stack Data Platform
+Tags: Full-Stack, React, Next.js, Database, Scalability
+Evidence Type: Project
+
+Context:
+Built a scalable Airtable-inspired web application designed to handle large datasets with spreadsheet-like interactions.
+
+What I Did:
+Implemented virtualized rendering for large tables (100k+ rows) using TanStack Virtualizer. Built dynamic column operations including resizing, sorting, filtering, and visibility control. Designed backend data models using Prisma and PostgreSQL to support efficient querying and sparse cell storage.
+
+Tech:
+Next.js, TypeScript, React, TanStack Table, TanStack Virtualizer, Prisma, PostgreSQL
+
+Impact:
+Enabled efficient handling of large datasets with responsive UI, demonstrating strong frontend performance optimization and backend design.
+
+---
+
+[PROJECT]
+Title: EdForum-Style Frontend Only Discussion Board
+Tags: Frontend Development, Web Application, UI/UX, CRUD Operations, Role-Based Access Control
+Evidence Type: Project
+
+Context:
+Designed and developed a discussion forum platform inspired by Ed Forum to enable users to ask questions, engage in discussions, and collaborate in an academic-style environment.
+
+What I Did:
+Built a responsive front-end interface supporting core discussion features including posting queries, commenting, liking, and watching threads. Implemented user-specific actions such as editing and deleting own posts, along with role-based controls allowing admins to manage all content and assign admin privileges. Designed user profile views with display images and metadata to enhance interaction and identity within the platform.
+
+Tech:
+HTML, CSS, JavaScript, Bootstrap, GitHub
+
+Impact:
+Delivered a fully functional interactive discussion interface with structured user engagement flows and role-based permissions, demonstrating strong frontend fundamentals and scalable UI design patterns applicable to collaborative platforms
+
+---
+
+[PROJECT]
+Title: Presentation Builder Web App (Slides.com Clone)
+Tags: Frontend Development, ReactJS, Interactive UI, State Management, Component-Based Architecture
+Evidence Type: Project
+
+Context:
+Developed a web-based presentation platform inspired by Slides.com, enabling users to create, customize, and present slide decks directly in the browser.
+
+What I Did:
+Built a dynamic React-based interface allowing users to create and manage slides with support for multiple content types including text, images, videos, and code blocks. Implemented per-slide customization features such as background themes and font styles. Designed a slideshow/presentation mode for seamless viewing, focusing on smooth transitions and intuitive navigation. Structured the app using reusable components and managed state for real-time updates across slides.
+
+Tech:
+ReactJS, React-Bootstrap, JavaScript, HTML, CSS, GitHub
+
+Impact:
+Delivered a feature-rich, interactive presentation tool showcasing strong proficiency in React and component-driven design, with scalable architecture suitable for complex UI applications involving dynamic content rendering.
+
+---
+
+[PROJECT]
+Title: Job Classification using Fine-Tuned LLaMA-3 Models
+Tags: LLMs, NLP, Fine-Tuning, LoRA, Model Optimization, Classification, MLOps
+Evidence Type: Project
+
+Context:
+Developed an NLP pipeline to classify real-world job descriptions into structured categories by fine-tuning lightweight LLMs, addressing challenges of noisy and unstructured recruitment data.
+
+What I Did:
+Fine-tuned LLaMA-3 (1B and 3B) models using the Unsloth framework with LoRA and quantization to enable efficient training on limited compute. Cleaned and structured raw job description data into high-quality labeled datasets. Built classification pipelines for multiple tasks and implemented inference workflows to evaluate model performance on unseen real-world data. Benchmarked fine-tuned models against statistical baselines and baseline LLMs to validate improvements.
+
+Tech:
+Python, PyTorch, Hugging Face Transformers, Unsloth, LoRA, Quantization (4-bit/8-bit), Pandas, NumPy
+
+Impact:
+Fine-tuning significantly improved model performance across tasks, with work arrangement classification accuracy increasing from 0.18 to 0.88 and weighted F1 from 0.52 to 0.88, while seniority classification achieved around 0.60 accuracy and 0.62 weighted F1, consistently outperforming baseline approaches and demonstrating the effectiveness of parameter-efficient fine-tuning on real-world data.
+
+---
+
+[PROJECT]
+Title: Image Captioning for the Visually Impaired using BLIP (VizWiz Dataset)
+Tags: Computer Vision, Multimodal Learning, Image Captioning, Deep Learning, PyTorch, Transformers
+Evidence Type: Project
+
+Context:
+Built an assistive AI solution to generate descriptive captions for images captured by visually impaired users, using the real-world VizWiz dataset which contains noisy and unconstrained images.
+
+What I Did:
+Led the development of a multimodal image captioning pipeline using the BLIP architecture. Preprocessed and curated a dataset of over 23K image-caption pairs by filtering noisy and low-quality samples to improve training reliability. Fine-tuned the BLIP model using PyTorch and Hugging Face Transformers, performing iterative experimentation and hyperparameter tuning to optimize performance. Evaluated the model using standard captioning metrics including BLEU, METEOR, ROUGE, CIDEr, and SPICE to ensure comprehensive benchmarking.
+
+Tech:
+Python, PyTorch, Hugging Face Transformers, BLIP, OpenCV, Pandas, NumPy
+
+Impact:
+Achieved significant improvements in caption quality, increasing CIDEr by 23% and SPICE by 30%, demonstrating strong gains in semantic understanding and real-world caption generation performance for assistive applications.
+
+---
+
+[PROJECT]
+Title: Air Quality Analysis using Neural Networks
+Tags: Machine Learning, Neural Networks, Classification, Regression, Time-Series Data, Data Analysis
+Evidence Type: Project
+
+Context:
+Developed machine learning models to analyze real-world air quality sensor data, focusing on both predictive modeling and threshold-based classification for environmental monitoring.
+
+What I Did:
+Designed and trained neural network models for both classification and regression tasks on sensor data. Built pipelines to preprocess and structure environmental data for model training, and implemented models to predict air quality levels as well as classify conditions based on defined thresholds. Evaluated model performance using appropriate regression and classification metrics, ensuring robustness and real-world applicability
+
+Tech:
+Python, TensorFlow/PyTorch, NumPy, Pandas, Scikit-learn
+
+Impact:
+Achieved 93% classification accuracy on air quality classification tasks, while maintaining reliable regression performance evaluated using RMSE and MAE, demonstrating the effectiveness of neural networks for real-world environmental data analysis.
+
+---
+
+[PROJECT]
+Title: Taxi Navigation using Reinforcement Learning (Q-Learning & SARSA)
+Tags: Reinforcement Learning, Q-Learning, SARSA, OpenAI Gym, Markov Decision Processes, Policy Learning
+Evidence Type: Project
+
+Context:
+Developed a reinforcement learning solution to train an autonomous agent to efficiently navigate a grid-world environment (Taxi-v3), simulating real-world sequential decision-making tasks involving pickup and drop-off operations.
+
+What I Did:
+Implemented and compared Q-Learning (off-policy) and SARSA (on-policy) algorithms using an epsilon-greedy exploration strategy with decay to balance exploration and exploitation. Designed training pipelines over 4000 episodes, tuning hyperparameters such as learning rate and discount factor to optimize convergence. Built evaluation functions to measure performance across metrics such as accumulated rewards, steps per episode, and success rate. Visualized agent learning behavior and policy effectiveness through reward and step trends, and enabled persistence of trained Q-tables for reuse and analysis.
+
+Tech:
+Python, OpenAI Gym, NumPy, Matplotlib
+
+Impact:
+Successfully trained agents to learn optimal navigation policies in a constrained environment, demonstrating clear convergence in reward optimization and reduction in steps per episode, while providing a comparative analysis of on-policy vs off-policy learning approaches in reinforcement learning systems.
+
+---
+
+[PROJECT]
+Title: Multi-Threaded UDP Server with Controlled Client Handling
+Tags: Networking, UDP/TCP, Concurrent Programming, Client-Server Architecture, Python Sockets
+Evidence Type: Project
+
+Context:
+Built a custom client-server system where core communication occurs over UDP, with TCP used selectively for reliable file transfer, simulating real-world hybrid network protocols.
+
+What I Did:
+Designed and implemented a multi-threaded UDP server in Python that enforces a controlled interaction model where only one client is served at a time. Developed a two-step communication protocol requiring clients to complete a validation phase before proceeding, with per-client state tracking to ensure correct sequencing of requests. Integrated TCP connections specifically for file upload and download operations to handle reliability-critical tasks, while maintaining lightweight UDP communication for the main workflow. Ensured proper synchronization across threads to prevent race conditions and maintain consistent server behavior.
+
+Tech:
+Python, Socket Programming, UDP, TCP, Multithreading
+
+Impact:
+Delivered a robust hybrid communication system demonstrating strong understanding of networking fundamentals, protocol design, and concurrency control, with reliable handling of multiple clients while preserving data integrity and correct request sequencing.
+
+---
+
+[PROJECT]
+Title: AIoT Leaf Health Monitoring System using Spectral Sensing and LLM Integration
+Tags: IoT, AIoT, Embedded Systems, BLE, MQTT, AWS IoT, Sensor Data Processing, LLM Applications
+Evidence Type: Project
+
+Context:
+Developed an end-to-end AIoT system for monitoring plant health by capturing spectral data from leaves and leveraging cloud-based processing and LLMs for intelligent analysis.
+
+What I Did:
+Integrated the AS7265x spectral sensor with an Arduino Nano BLE microcontroller to capture calibrated multi-wavelength spectral data from plant leaves. Implemented I2C-based communication for sensor data acquisition and built a BLE pipeline to transmit readings to a local system. Designed a cloud integration workflow where processed sensor data was sent to AWS IoT Core via MQTT for scalable data ingestion. Built a downstream pipeline to pass structured spectral data to a ChatGPT-based interface for interpreting plant health conditions, enabling intelligent, human-readable insights. Handled calibration of sensor readings, data formatting, and debugging of hardware communication and BLE connectivity issues
+
+Tech:
+Arduino Nano BLE, I2C, BLE (Bluetooth Low Energy), AWS IoT Core (MQTT), Python (Bleak), Embedded Systems, LLM APIs
+
+Impact:
+Delivered a full-stack AIoT solution combining hardware sensing, cloud communication, and AI-driven analysis, enabling real-time plant health monitoring and showcasing the integration of edge devices with modern LLM-based decision support systems.
+
+---
+
+[PROJECT]
+Title: 
+Tags: 
+Evidence Type: Project
+
+Context:
+
+What I Did:
+
+Tech:
+
+Impact:
+
+---
+
+
+
+

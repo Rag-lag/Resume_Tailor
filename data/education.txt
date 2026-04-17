@@ -1,0 +1,33 @@
+[EDUCATION]
+University: University of New South Wales (UNSW)
+
+Degree:
+Master of Information Technology (Specialization in AI)
+
+Performance:
+WAM: 84.4
+
+Completion:
+December 2025
+
+Focus Areas:
+Artificial Intelligence, Machine Learning, Data Mining, Software Engineering
+
+---
+[EDUCATION]
+University: Netaji Subhas University of Technology
+
+Degree:
+Bachelors of Technology in Electronics and Communication Engineering
+
+Performance:
+GPA: 7.5
+
+Completion:
+May 2023
+
+Focus Areas:
+Wireless Communication, Analog and Digital Circuits, Arduino, Signal Processing
+Artificial Intelligence, Machine Learning, Data Mining, Software Engineering
+
+---
