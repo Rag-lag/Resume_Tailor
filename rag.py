@@ -72,7 +72,7 @@ def extract_tags(entry: str):
     raw_tags = match.group(1)
     return [tag.strip() for tag in raw_tags.split(",") if tag.strip()]
 
-def chunk_text(text: str, chunk_size: int = 120, overlap: int = 30):
+def chunk_text(text: str, chunk_size: int = 200, overlap: int = 50):
     words = text.split()
     if len(words) <= chunk_size:
         return [text]
