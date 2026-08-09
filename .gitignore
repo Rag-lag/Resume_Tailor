@@ -5,3 +5,4 @@ __pycache__/
 tester.py
 venv/
 resumes/
+chroma_db/

@@ -37,12 +37,15 @@ def resume_to_chunks(structured: dict) -> list[dict]:
                 "role": exp["role"],
             })
     for proj in structured.get("projects", []):
-        for bullet in proj.get("bullets", [proj.get("description", "")]):
+        for bullet in proj.get("bullets", []):
             chunks.append({
                 "text": bullet,
                 "source_type": "project",
                 "project_name": proj["name"],
             })
+    seen_skills = set()
     for skill in structured.get("skills", []):
-        chunks.append({"text": skill, "source_type": "skill"})
+        if skill.lower() not in seen_skills:
+            seen_skills.add(skill.lower())
+            chunks.append({"text": skill, "source_type": "skill"})
     return chunks
