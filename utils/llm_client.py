@@ -23,8 +23,7 @@ FREE_MODELS = [
 ]
 
 def call_llm(prompt: str, system: str = "", json_mode: bool = False,
-             max_retries: int = 3) -> str:
-    """Call OpenRouter with model fallback and exponential backoff."""
+             max_retries: int = 3, temperature: float = 0.3) -> str:
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
@@ -40,7 +39,7 @@ def call_llm(prompt: str, system: str = "", json_mode: bool = False,
                 response = client.chat.completions.create(
                     model=model,
                     messages=messages,
-                    temperature=0.3,
+                    temperature=temperature,
                     **kwargs,
                 )
                 return response.choices[0].message.content
@@ -50,19 +49,16 @@ def call_llm(prompt: str, system: str = "", json_mode: bool = False,
                 print(f"[{model}] attempt {attempt+1} failed: {e}. Retrying in {wait}s")
                 time.sleep(wait)
         print(f"Model {model} exhausted retries, falling back to next model")
-
     raise RuntimeError(f"All models failed. Last error: {last_error}")
 
 
-def call_llm_json(prompt: str, system: str = "") -> dict:
-    """Wrapper that parses the response as JSON, with one repair attempt."""
-    raw = call_llm(prompt, system=system, json_mode=True)
+def call_llm_json(prompt: str, system: str = "", temperature: float = 0.3) -> dict:
+    raw = call_llm(prompt, system=system, json_mode=True, temperature=temperature)
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
-        # Ask the model to fix its own output
         fixed = call_llm(
             f"This is not valid JSON, return only corrected valid JSON:\n{raw}",
-            json_mode=True,
+            json_mode=True, temperature=temperature,
         )
         return json.loads(fixed)
