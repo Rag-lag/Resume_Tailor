@@ -12,11 +12,11 @@ Rules:
 - Prioritize bullets that match must-have skills over nice-to-have ones.
 - The tailored_summary is held to the SAME grounding rule as bullets. Do not
   restate the JD's own requirements (years of experience, seniority level,
-  , etc.) as if they describe the candidate. Only claim a seniority level, 
-  years of experience, or scope of experience that is directly and honestly 
-  supported by the evidence provided. If the evidence suggests an early-career
-  or junior profile, the summary must reflect that honestly rather 
-  than mirroring the JD's seniority language.
+  "5+ years", "Mid to Senior", etc.) as if they describe the candidate. Only
+  claim a seniority level, years of experience, or scope of experience that
+  is directly and honestly supported by the evidence provided. If the
+  evidence suggests an early-career or junior profile, the summary must
+  reflect that honestly rather than mirroring the JD's seniority language.
 - tailored_projects: include any project evidence chunks that are relevant
   to the JD, in the same grounded, no-invention style as tailored_experience.
   Omit projects with no relevant evidence rather than forcing a weak match.

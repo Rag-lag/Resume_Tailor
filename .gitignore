@@ -6,3 +6,6 @@ tester.py
 venv/
 resumes/
 chroma_db/
+notes/
+CLAUDE.md
+data/
