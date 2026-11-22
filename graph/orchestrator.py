@@ -1,3 +1,5 @@
+import time
+
 from langgraph.graph import StateGraph, END
 
 from graph.state import ResumeState
@@ -6,17 +8,18 @@ from agents.jd_analyzer_agent import analyze_jd
 from agents.retrieval_agent import gather_evidence
 from agents.tailoring_agent import tailor_resume
 from agents.scoring_agent import score_tailored_resume
-from vectorstore.chroma_client import index_resume_chunks, new_collection_name, delete_collection
+from vectorstore.index import build_index
 
 SCORE_THRESHOLD = 70
+# Vercel Hobby stops a request at 300s and a retry takes ~60-90s (measured 83s), so skip it late in a run.
+RETRY_TIME_BUDGET_S = 120
 
 # Nodes return only the keys they change; LangGraph merges them into the state.
 
 
 def node_parse_resume(state: ResumeState) -> dict:
     structured = parse_resume(state["resume_file_path"])
-    index_resume_chunks(resume_to_chunks(structured), state["collection_name"])
-    return {"structured_resume": structured}
+    return {"structured_resume": structured, "index": build_index(resume_to_chunks(structured))}
 
 
 def node_analyze_jd(state: ResumeState) -> dict:
@@ -24,7 +27,7 @@ def node_analyze_jd(state: ResumeState) -> dict:
 
 
 def node_retrieve(state: ResumeState) -> dict:
-    return {"evidence": gather_evidence(state["jd_requirements"], state["collection_name"])}
+    return {"evidence": gather_evidence(state["jd_requirements"], state["index"])}
 
 
 def node_tailor(state: ResumeState) -> dict:
@@ -49,7 +52,8 @@ def node_score(state: ResumeState) -> dict:
 
 def should_retry(state: ResumeState) -> str:
     score = state["score_result"]["match_score"]  # already coerced to int by the scorer
-    if score >= SCORE_THRESHOLD or state["iteration"] >= state["max_iterations"]:
+    out_of_time = time.time() - state["started_at"] > RETRY_TIME_BUDGET_S
+    if score >= SCORE_THRESHOLD or state["iteration"] >= state["max_iterations"] or out_of_time:
         return "end"
     return "retry"
 
@@ -78,8 +82,9 @@ def _initial_state(resume_file_path: str, jd_text: str, max_iterations: int) -> 
     return {
         "resume_file_path": resume_file_path,
         "jd_text": jd_text,
-        "collection_name": new_collection_name(),
+        "started_at": time.time(),
         "structured_resume": None,
+        "index": None,
         "jd_requirements": None,
         "evidence": None,
         "tailored_resume": None,
@@ -95,15 +100,12 @@ def stream_pipeline(resume_file_path: str, jd_text: str, max_iterations: int = 2
     """Yields (node_name, current_state) after each node completes — for driving
     a progress UI. Use run_pipeline() when you only want the final state."""
     state = _initial_state(resume_file_path, jd_text, max_iterations)
-    try:
-        # "updates" mode is used (rather than "values") because the UI needs the
-        # node name; the partial update is merged into the running state here.
-        for update in _APP.stream(state, stream_mode="updates"):
-            for node_name, node_output in update.items():
-                state = {**state, **(node_output or {})}
-                yield node_name, state
-    finally:
-        delete_collection(state["collection_name"])
+    # "updates" mode (not "values") because the UI needs the node name; the partial
+    # update is merged into the running state here.
+    for update in _APP.stream(state, stream_mode="updates"):
+        for node_name, node_output in update.items():
+            state = {**state, **(node_output or {})}
+            yield node_name, state
 
 
 def run_pipeline(resume_file_path: str, jd_text: str, max_iterations: int = 2) -> ResumeState:

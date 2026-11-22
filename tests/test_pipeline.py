@@ -1,5 +1,6 @@
 """Run from the repo root: venv\\Scripts\\python.exe -m unittest discover -s tests
 Stubs out every LLM call; still needs OPENROUTER_API_KEY set (llm_client reads it on import)."""
+import json
 import unittest
 from unittest.mock import patch
 
@@ -48,6 +49,36 @@ class PipelineTest(unittest.TestCase):
         _, attempts = self.run_with_scores([90])
         texts = [e["text"] for e in attempts[0]["Flutter"]]
         self.assertIn("Built a Flutter app for 1M users", texts)
+
+
+class ApiTest(unittest.TestCase):
+    def setUp(self):
+        from fastapi.testclient import TestClient
+        import app
+        self.app_module = app
+        self.client = TestClient(app.app)
+
+    def post(self, filename, content=b"%PDF-1.4", jd="Flutter developer"):
+        return self.client.post("/api/tailor", files={"resume": (filename, content)},
+                                data={"job_description": jd})
+
+    def test_rejects_bad_uploads(self):
+        self.assertEqual(self.post("resume.txt").status_code, 400)
+        self.assertEqual(self.post("resume.pdf", content=b"").status_code, 400)
+        self.assertEqual(self.post("resume.pdf", jd="   ").status_code, 400)
+        self.assertEqual(self.post("resume.pdf", content=b"x" * (4 * 1024 * 1024 + 1)).status_code, 413)
+
+    def test_streams_progress_then_result(self):
+        def fake_stream(path, jd):
+            yield "parse_resume", {"iteration": 0}
+            yield "score", {"iteration": 1, "max_iterations": 2, "started_at": 0,
+                            "score_result": {"match_score": 90},
+                            "best_tailored_resume": {"tailored_skills": ["Flutter"]},
+                            "best_score_result": {"match_score": 90}}
+        with patch.object(self.app_module, "stream_pipeline", fake_stream):
+            lines = [json.loads(l) for l in self.post("resume.pdf").text.splitlines()]
+        self.assertEqual([l["type"] for l in lines], ["progress", "progress", "result"])
+        self.assertEqual(lines[-1]["tailored"]["tailored_skills"], ["Flutter"])
 
 
 if __name__ == "__main__":

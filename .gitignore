@@ -9,3 +9,5 @@ chroma_db/
 notes/
 CLAUDE.md
 data/
+frontend/node_modules/
+frontend/dist/

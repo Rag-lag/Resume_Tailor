@@ -1,130 +1,77 @@
+"""FastAPI backend: one request does the whole run and streams progress as NDJSON
+lines, so nothing has to live on the server between requests. The React app in
+frontend/ calls it at /api/tailor.
+Local dev: venv\\Scripts\\python.exe -m uvicorn app:app --reload --port 8000"""
+import json
+import os
+import tempfile
 import traceback
 
-import gradio as gr
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 
 from graph.orchestrator import stream_pipeline, should_retry
 
 SUPPORTED_EXTENSIONS = (".pdf", ".docx")
+MAX_UPLOAD_BYTES = 4 * 1024 * 1024  # Vercel rejects request bodies over 4.5 MB
 
-# The pipeline yields after a node FINISHES, so the status shows the step that
-# is about to run next, not the one that just completed.
-NEXT_STEP_LABEL = {
-    "parse_resume": "Analyzing job description",
-    "analyze_jd": "Retrieving relevant experience",
-    "retrieve": "Tailoring resume",
-    "tailor": "Scoring match quality",
+# The pipeline reports a node once it FINISHES, so the message names the next step.
+NEXT_STEP_MESSAGE = {
+    "parse_resume": "Reading the job description",
+    "analyze_jd": "Finding matching experience",
+    "retrieve": "Tailoring your resume",
+    "tailor": "Checking the match",
 }
 
-IDLE_BUTTON = gr.update(interactive=True, value="Tailor resume")
-BUSY_BUTTON = gr.update(interactive=False, value="Working...")
+app = FastAPI(title="Resume Tailor")
 
 
-def _status_after(node_name: str, state: dict) -> str:
+def _progress_message(node_name: str, state: dict) -> str:
     if node_name == "score":
         if should_retry(state) == "retry":
-            return f"⏳ Score below target, re-tailoring (attempt {state['iteration'] + 1})..."
-        return "⏳ Finishing..."
-    label = NEXT_STEP_LABEL.get(node_name, node_name)
-    if node_name == "tailor" and state["iteration"] > 1:
-        label += f" (attempt {state['iteration']})"
-    return f"⏳ {label}..."
+            return f"Match is low, trying again (attempt {state['iteration'] + 1})"
+        return "Finishing up"
+    return NEXT_STEP_MESSAGE.get(node_name, node_name)
 
 
-def _join(items) -> str:
-    return ", ".join(str(i) for i in (items or []))
+def _line(event: dict) -> str:
+    return json.dumps(event) + "\n"
 
 
-def _render_entries(entries, title_fn) -> str:
-    blocks = []
-    for entry in entries or []:
-        bullets = "\n".join(f"- {b}" for b in entry.get("bullets", []) or [])
-        blocks.append(f"**{title_fn(entry)}**\n{bullets}")
-    return "\n\n".join(blocks)
-
-
-def _render_results(tailored: dict, score: dict) -> tuple[str, str, str, str]:
-    summary = f"""## Match score: {score.get('match_score', 0)}/100
-
-**Keyword coverage:** {score.get('keyword_coverage', 0.0):.0%}
-
-**Covered requirements:** {_join(tailored.get('covered_requirements')) or 'None'}
-
-**Gaps (honest):** {_join(score.get('genuine_gaps')) or 'None identified'}
-"""
-    if tailored.get("tailored_summary"):
-        summary += f"\n**Summary:** {tailored['tailored_summary']}\n"
-
-    experience = _render_entries(
-        tailored.get("tailored_experience"),
-        lambda e: f"{e.get('role', 'Role')} — {e.get('company', 'Company')}",
-    ) or "_No experience matched this job description._"
-    projects = _render_entries(
-        tailored.get("tailored_projects"),
-        lambda p: p.get("name", "Project"),
-    ) or "_No projects matched this job description._"
-    skills = _join(tailored.get("tailored_skills")) or "_No matching skills found._"
-    return summary, experience, projects, skills
-
-
-def process(resume_file, jd_text):
-    resume_path = getattr(resume_file, "name", resume_file)
-    jd_text = (jd_text or "").strip()
-
-    if not resume_path:
-        yield IDLE_BUTTON, "⚠️ Please upload a resume (PDF or DOCX).", "", "", "", ""
-        return
-    if not str(resume_path).lower().endswith(SUPPORTED_EXTENSIONS):
-        yield IDLE_BUTTON, "⚠️ Unsupported file type. Upload a PDF or DOCX.", "", "", "", ""
-        return
+@app.post("/api/tailor")
+async def tailor(resume: UploadFile = File(...), job_description: str = Form("")):
+    ext = os.path.splitext(resume.filename or "")[1].lower()
+    if ext not in SUPPORTED_EXTENSIONS:
+        raise HTTPException(400, "Upload your resume as a PDF or DOCX file.")
+    data = await resume.read(MAX_UPLOAD_BYTES + 1)
+    if not data:
+        raise HTTPException(400, "That file is empty. Upload your resume as a PDF or DOCX file.")
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "That file is over 4 MB. Upload a smaller PDF or DOCX.")
+    jd_text = job_description.strip()
     if not jd_text:
-        yield IDLE_BUTTON, "⚠️ Please paste a job description.", "", "", "", ""
-        return
+        raise HTTPException(400, "Paste the job description you're applying to.")
 
-    yield BUSY_BUTTON, "⏳ Parsing resume...", "", "", "", ""
+    with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as tmp:
+        tmp.write(data)
 
-    try:
-        final_state = None
-        for node_name, state in stream_pipeline(resume_path, jd_text):
-            final_state = state
-            yield BUSY_BUTTON, _status_after(node_name, state), "", "", "", ""
+    def events():
+        try:
+            final_state = None
+            for node_name, state in stream_pipeline(tmp.name, jd_text):
+                final_state = state
+                yield _line({"type": "progress", "node": node_name,
+                             "message": _progress_message(node_name, state)})
+            tailored = (final_state or {}).get("best_tailored_resume")
+            score = (final_state or {}).get("best_score_result")
+            if not tailored or not score:
+                raise RuntimeError("Pipeline finished without producing a tailored resume.")
+            yield _line({"type": "result", "tailored": tailored, "score": score})
+        except Exception:
+            traceback.print_exc()  # details stay in the server log, not on a public page
+            yield _line({"type": "error",
+                         "message": "Tailoring stopped partway through. Try again in a minute."})
+        finally:
+            os.unlink(tmp.name)
 
-        tailored = (final_state or {}).get("best_tailored_resume")
-        score = (final_state or {}).get("best_score_result")
-        if not tailored or not score:
-            raise RuntimeError("Pipeline finished without producing a tailored resume.")
-        outputs = _render_results(tailored, score)
-    except Exception:
-        traceback.print_exc()  # full details stay in the server log, not on a public page
-        yield IDLE_BUTTON, "❌ Something went wrong, please try again.", "", "", "", ""
-        return
-
-    yield IDLE_BUTTON, "✅ Done", *outputs
-
-
-with gr.Blocks(title="Resume Tailor") as demo:
-    gr.Markdown("# Multi-agent resume tailoring")
-
-    with gr.Row():
-        resume_input = gr.File(label="Upload resume (PDF or DOCX)", file_types=list(SUPPORTED_EXTENSIONS))
-        jd_input = gr.Textbox(label="Job description", lines=10)
-
-    submit_btn = gr.Button("Tailor resume", variant="primary")
-    status_output = gr.Markdown()
-
-    score_output = gr.Markdown(label="Score")
-    gr.Markdown("### Experience")
-    bullets_output = gr.Markdown()
-    gr.Markdown("### Projects")
-    projects_output = gr.Markdown()
-    gr.Markdown("### Skills")
-    skills_output = gr.Markdown()
-
-    submit_btn.click(
-        fn=process,
-        inputs=[resume_input, jd_input],
-        outputs=[submit_btn, status_output, score_output, bullets_output, projects_output, skills_output],
-        concurrency_limit=4,  # runs are isolated per collection; Gradio's default of 1 queues everyone
-    )
-
-if __name__ == "__main__":
-    demo.launch()
+    return StreamingResponse(events(), media_type="application/x-ndjson")

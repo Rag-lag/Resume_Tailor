@@ -1,0 +1,12 @@
+.env
+venv/
+resumes/
+notes/
+data/
+tests/
+chroma_db/
+tester.py
+__pycache__/
+CLAUDE.md
+frontend/node_modules/
+frontend/dist/
