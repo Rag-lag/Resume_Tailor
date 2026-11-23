@@ -1,8 +1,12 @@
 import os
 import tempfile
 
-import numpy as np
-from fastembed import TextEmbedding
+# huggingface_hub (used by fastembed to download) also writes to its own cache under
+# HF_HOME, default ~/.cache, which is read-only on Vercel. Must be set before import.
+os.environ.setdefault("HF_HOME", os.path.join(tempfile.gettempdir(), "huggingface"))
+
+import numpy as np  # noqa: E402
+from fastembed import TextEmbedding  # noqa: E402
 
 # Same all-MiniLM-L6-v2 model as before, run through ONNX instead of PyTorch so the
 # app fits Vercel's 500 MB Python bundle. Distances match the PyTorch version exactly,
