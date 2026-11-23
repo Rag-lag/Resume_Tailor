@@ -1,6 +1,9 @@
 """Run from the repo root: venv\\Scripts\\python.exe -m unittest discover -s tests
 Stubs out every LLM call; still needs OPENROUTER_API_KEY set (llm_client reads it on import)."""
 import json
+import os
+import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -79,6 +82,18 @@ class ApiTest(unittest.TestCase):
             lines = [json.loads(l) for l in self.post("resume.pdf").text.splitlines()]
         self.assertEqual([l["type"] for l in lines], ["progress", "progress", "result"])
         self.assertEqual(lines[-1]["tailored"]["tailored_skills"], ["Flutter"])
+
+
+class DeployTest(unittest.TestCase):
+    def test_hf_cache_points_at_temp_dir(self):
+        # Vercel is read-only outside /tmp. huggingface_hub fixes its cache path when first
+        # imported, so if anything imports it before vectorstore/index.py sets HF_HOME, every
+        # live request crashes. A fresh process is needed: this one has already imported it.
+        code = ("import os, tempfile, app, huggingface_hub.constants as c;"
+                "assert c.HF_HOME == os.path.join(tempfile.gettempdir(), 'huggingface'), c.HF_HOME")
+        env = {k: v for k, v in os.environ.items() if k != "HF_HOME"}
+        result = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr[-500:])
 
 
 if __name__ == "__main__":
